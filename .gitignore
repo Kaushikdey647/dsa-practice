@@ -1,3 +1,12 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Prerequisites
 *.d
 
@@ -31,6 +40,14 @@
 *.out
 *.app
 
-# VS Code Files
+# Ignore files with extension `.class` & `.sm`
+*.class
+*.sm
 
+# Ignore `bin` dir
+bin/
+# or
+*/bin/*
+
+# VS Code Files
 .vscode/
