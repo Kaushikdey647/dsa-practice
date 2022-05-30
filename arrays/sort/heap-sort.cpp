@@ -77,13 +77,14 @@ void heapify(int* arr, int n, int i){
 }
 
 bool heapSort(int* begin, int* end){
-    int n = end - begin;
+    int n = end - begin; //get number of elements
     try{
+        //build a heap, i.e. rearrange in maxheap
         for(int i = n/2-1; i >= 0; i--){
             heapify(begin,n,i);
         }
         for(int j = n-1; j > 0; j--){
-            swap(begin,begin+j);
+            swap<int>(begin,begin+j);
             heapify(begin,j,0);
         }
     }
