@@ -48,7 +48,7 @@ Twitter: https://twitter.com/KayDee647
 #include <fstream>
 
 using namespace std;
-
+using namespace chrono;
 
 template<class T>
 T cinget(std::istream& is){
@@ -64,41 +64,63 @@ T temp = *b;
 *a = temp;
 }
 
-vector<pair<int, int>> activitySelection(vector<pair<int, int>> activities)
+int paths(int N)
 {
-  //Vectors are sorted in finish time
-  sort(
-    activities.begin(),
-    activities.end(),
-    [](const pair<int, int>& a, const pair<int, int>& b){
-      return a.second < b.second;
+    if (N == 2)
+        return 1;
+    if (N == 1)
+        return 0;
+
+    int number_of_paths = 0;
+
+    for (int i = 2; i <= N / i; i++)
+    {
+        if (N % i != 0)
+            continue; // Not a factor
+        number_of_paths += paths(i);
+        if (i != N / i)
+        { // if it is not a square root
+            number_of_paths += paths(N / i);
+        }
     }
-  );
-  vector<pair<int, int>> res;
 
-  auto selected = activities.begin(); // First Element always in
+    return number_of_paths + 1;
+}
 
-  res.push_back(*selected);
+int paths_cached( int N, vector<int> cache ){
+    if( N == 2 )
+        return 1;
+    if (N == 1)
+        return 0;
 
-  for (auto itr = activities.begin() + 1; itr != activities.end(); itr++)
-  {
-    //Check the upcoming one
-    if( itr-> first >= selected -> second ){
-      res.push_back(*itr);
-      selected = itr;
+    if (cache[N] != 0){
+        return cache[N];
     }
-  }
 
-  return res;
+    int number_of_paths = 0;
+
+    for (int i = 2; i <= N / i; i++){
+        if(N%i != 0)
+            continue; //Not a factor
+        number_of_paths += paths_cached(i, cache);
+        if( i != N/i ){ //if it is not a square root
+            number_of_paths += paths_cached(N / i, cache);
+        }
+    }
+
+    cache[N] = number_of_paths + 1;
+    return cache[N];
 }
 
 int main()
 {
-  vector<pair<int, int>> input{ {10,20},{12,25},{20,40}};
-  vector<pair<int, int>> output = activitySelection(input);
-  for (auto pair : output)
-  {
-    cout << " | " << pair.first << " , " << pair.second;
-  }
-  cout << " | " << endl;
+    int N = 10000;
+    vector<int> cacheVect(N, 0);
+    auto beg = high_resolution_clock::now();
+    cout << "Cached: " << paths_cached(N, cacheVect) << " ";
+    auto mid = high_resolution_clock::now();
+    cout << "Time Taken: " << duration<double>(mid - beg).count() << endl;
+    cout << "Uncached: " << paths(N) << " ";
+    auto end = high_resolution_clock::now();
+    cout << "Time Taken: " << duration<double>(end - mid).count() << endl;
 }

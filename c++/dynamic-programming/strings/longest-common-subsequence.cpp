@@ -64,6 +64,10 @@ T temp = *b;
 *a = temp;
 }
 
+string longestCommonSubsequence( string str1, string str2){
+  
+}
+
 int main()
 {
  ios_base::sync_with_stdio(false);
