@@ -64,20 +64,41 @@ T temp = *b;
 *a = temp;
 }
 
-vector<int> activitySelection(vector<int> start, vector<int>finish){
-  //Select the Task with least duration,
-  //Eliminate all tasks in its overlap.
-  //Select another task with least duration,
-  //Keep doing untill tasks are all eliminated or done
+vector<pair<int, int>> activitySelection(vector<pair<int, int>> activities)
+{
+  //Vectors are sorted in finish time
+  sort(
+    activities.begin(),
+    activities.end(),
+    [](const pair<int, int>& a, const pair<int, int>& b){
+      return a.second < b.second;
+    }
+  );
+  vector<pair<int, int>> res;
 
-  //Proof of correctness
-  /*
-  Assume there was a
-  */
-} 
+  auto selected = activities.begin(); // First Element always in
 
+  res.push_back(*selected);
+
+  for (auto itr = activities.begin() + 1; itr != activities.end(); itr++)
+  {
+    //Check the upcoming one
+    if( itr-> first >= selected -> second ){
+      res.push_back(*itr);
+      selected = itr;
+    }
+  }
+
+  return res;
+}
 
 int main()
 {
-    
+  vector<pair<int, int>> input{ {10,20},{12,25},{20,40}};
+  vector<pair<int, int>> output = activitySelection(input);
+  for (auto pair : output)
+  {
+    cout << " | " << pair.first << " , " << pair.second;
+  }
+  cout << " | " << endl;
 }
